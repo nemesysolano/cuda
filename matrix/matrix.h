@@ -21,11 +21,19 @@ namespace matrix {
 			unsigned columns = 0;
 
 		private:
+			/** Releases allocated buffer.
+			 *
+			 */
+
 			void Destroy();
+
+			/** Sets buffer = nullptr and rows, columns = 0.
+			 *
+			 */
 			void Clear();
 
 		public:
-			/** Default Constructor.
+			/** Releases allocated buffer and sets rows and columns to zero and buffer to nullptr.
 			 *	Creates an empty matrix.
 			 */
 			inline Matrix() {}
@@ -68,12 +76,24 @@ namespace matrix {
 			 */
 			inline bool IsEmpty() {return buffer == nullptr;}
 
-			/** Returns a reference to the value @(row, column) postition.
+			/** Returns a reference to the value @(row, column) position.
 			 *  @return a double.
 			 */
 			inline double & operator () (unsigned row, unsigned column) {return buffer[row + column*rows];}
+
+			/** Reports the vertical dimension.
+			 * @return Row count.
+			 */
 			inline unsigned Rows() { return rows; }
+
+			/** Reports the horizontal dimension.
+			 * @returns count.
+			 */
 			inline unsigned Columns() {return columns;}
+
+			/** Releases allocated buffer and sets rows and columns to zero and buffer to nullptr.
+			 *
+			 */
 			inline ~Matrix() {Destroy();}
 	};
 }
