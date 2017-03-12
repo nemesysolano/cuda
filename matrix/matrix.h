@@ -63,7 +63,14 @@ namespace matrix {
 				unsigned columns_ /**< Horizontal dimension*/
 			);
 
+			/** Returns true if this matrix is empty.
+			 *
+			 */
 			inline bool IsEmpty() {return buffer == nullptr;}
+
+			/** Returns a reference to the value @(row, column) postition.
+			 *  @return a double.
+			 */
 			inline double & operator () (unsigned row, unsigned column) {return buffer[row + column*rows];}
 			inline unsigned Rows() { return rows; }
 			inline unsigned Columns() {return columns;}
