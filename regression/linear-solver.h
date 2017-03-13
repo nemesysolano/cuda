@@ -58,6 +58,7 @@ namespace regression {
 	 *
 	 */
 	class LinearSolver {
+		//Dynamically allocated
 		double *d_A = nullptr;  /**< Device buffer for coefficients */
 		double *d_TAU= nullptr; /**< Device buffer for τ */
 		double *work= nullptr; /**< Device intermediate buffer. */
@@ -65,26 +66,54 @@ namespace regression {
 		double *d_D= nullptr; /**< Device buffer for original/non-reduced right side matrix. */
 		double *d_R= nullptr; /**< Device buffer reduced right side matrix. */
 		double *d_B= nullptr; /**< Device buffer system's solution. */
-		unsigned rows = 0; /** Row count (rows >= columns)*/
-		unsigned columns = 0; /** Column count */
 	    dim3 * Grid= nullptr;
 	    dim3 * Block= nullptr;
-	    int work_size = 0;
 	    int *devInfo = nullptr; /**< device info pointer*/
 	    cusolverDnHandle_t solver_handle = nullptr; /**< solver handle */
 	    cublasHandle_t cublas_handle = nullptr;/**< cublas handle */
+
+	    //
+		unsigned rows = 0; /** Row count (rows >= columns)*/
+		unsigned columns = 0; /** Column count */
+	    int work_size = 0;
+
+	private:
+		/** Releases allocated buffers and handles.
+		 *
+		 */
+
+		void Destroy();
+
+		/** Sets buffers and handles to nullptr.
+		 *
+		 */
+		void Clear();
+
+		/** Intializes internal buffers and handlers.
+		 *  This method is an auxiliary function for constructors.
+		 */
+		void init(
+			unsigned rows_ /**< [in] Strict positive integer. Must be >= columns_ */,
+			unsigned columns_ /**< [in] Strict positive integer.  */
+		);
+
+
+		/**
+		 *
+		 */
+		void CopyToThis(LinearSolver& other );
 	public:
 	    /** Copy constructor */
-		LinearSolver (const LinearSolver& other /**< The source matrix */) = delete;
+		LinearSolver (const LinearSolver& other /**< The source solver */);
 
 	    /** Move constructor */
-		LinearSolver (LinearSolver&& other /**< The source matrix */) = delete;
+		LinearSolver (LinearSolver&& other /**< The source solver */);
 
-		/** Copy operator */
-		LinearSolver& operator = (const LinearSolver & other /**< The source matrix */) = delete;
+		/** Copy assigment operator */
+		LinearSolver& operator = (const LinearSolver & other /**< The source matrix */);
 
 		/** Move assignment operator */
-		LinearSolver& operator = (LinearSolver && other /**< The source matrix */) = delete;
+		LinearSolver& operator = (LinearSolver && other /**< The source matrix */);
 
 
 		/** Creates the internal GPU & Host buffers.

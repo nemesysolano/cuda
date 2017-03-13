@@ -73,7 +73,7 @@
 				<editor-arch major="5" minor="0"/>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings">
-				<externalSettings containerId="matrix;com.nvidia.cuda.ide.eight_zero.configuration.so.debug.53521733" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
+				<externalSettings containerId="matrix;cdt.managedbuild.config.gnu.lib.debug.127942908" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
 					<externalSetting>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/matrix"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/matrix/Debug"/>
@@ -115,7 +115,7 @@
 								<option defaultValue="nvcc.compiler.optimization.level.most" id="nvcc.compiler.optimization.level.1059922142" name="Optimization Level" superClass="nvcc.compiler.optimization.level" valueType="enumerated"/>
 								<option id="nvcc.compiler.pic.1665816790" name="Position Independent Code (-fPIC)" superClass="nvcc.compiler.pic" value="true" valueType="boolean"/>
 								<option id="nvcc.compiler.cpp11option.610136361" name="Enable C++11 support (-std=c++11)" superClass="nvcc.compiler.cpp11option" value="true" valueType="boolean"/>
-								<option id="nvcc.compiler.include.paths.868313538" superClass="nvcc.compiler.include.paths" valueType="includePath">
+								<option id="nvcc.compiler.include.paths.868313538" name="Include paths (-I)" superClass="nvcc.compiler.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/matrix}&quot;"/>
 								</option>
 								<inputType id="nvcc.compiler.input.cu.1434336605" superClass="nvcc.compiler.input.cu"/>
@@ -125,10 +125,10 @@
 							<tool id="nvcc.linker.base.1068928086" name="NVCC Linker" superClass="nvcc.linker.base">
 								<option defaultValue="true" id="nvcc.linker.option.shared.257432479" name="Shared (-shared)" superClass="nvcc.linker.option.shared" valueType="boolean"/>
 								<option id="nvcc.linker.option.paths.1710411867" name="Library search path (-L)" superClass="nvcc.linker.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/matrix/Release}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/matrix/Debug}&quot;"/>
 									<listOptionValue builtIn="false" value="../cudart"/>
 								</option>
-								<option id="nvcc.linker.option.libs.369891259" superClass="nvcc.linker.option.libs" valueType="libs">
+								<option id="nvcc.linker.option.libs.369891259" name="Libraries (-l)" superClass="nvcc.linker.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="matrix"/>
 								</option>
 								<inputType id="nvcc.linker.input.1628715184" superClass="nvcc.linker.input">
@@ -138,7 +138,7 @@
 							</tool>
 							<tool id="nvcc.archiver.base.646684155" name="NVCC Archiver" superClass="nvcc.archiver.base"/>
 							<tool id="com.nvidia.host.assembler.2033051502" name="Host Assembler" superClass="com.nvidia.host.assembler">
-								<option id="gnu.both.asm.option.include.paths.1057125183" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
+								<option id="gnu.both.asm.option.include.paths.1057125183" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/matrix}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.422129904" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
@@ -154,10 +154,10 @@
 				</executable>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings">
-				<externalSettings containerId="matrix;com.nvidia.cuda.ide.eight_zero.configuration.so.release.499025291" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
+				<externalSettings containerId="matrix;cdt.managedbuild.config.gnu.lib.debug.127942908" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
 					<externalSetting>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/matrix"/>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/matrix/Release"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/matrix/Debug"/>
 						<entry flags="RESOLVED" kind="libraryFile" name="matrix" srcPrefixMapping="" srcRootPath=""/>
 					</externalSetting>
 				</externalSettings>

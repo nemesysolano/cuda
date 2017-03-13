@@ -47,13 +47,8 @@ __global__ void internal_init_data(double * d_C, const int M /* Rows*/, const in
     	d_C[j * N + i] = 1.0;
 }
 
-/** Creates the internal GPU & Host buffers.
- *  @throws LinearSolverError if columns_ > rows_
- */
-LinearSolver::LinearSolver(
-	unsigned rows_ /**< [in] Strict positive integer. Must be >= columns_ */,
-	unsigned columns_ /**< [in] Strict positive integer.  */
-):rows(rows_), columns(columns_) {
+
+void LinearSolver::init(unsigned rows, unsigned columns){
 	size_t Nrows = rows;
 	size_t Ncols = columns;
 
@@ -94,6 +89,76 @@ LinearSolver::LinearSolver(
     // --- Creates d_B
     gpuErrchk(cudaMalloc((void**)&d_B, Ncols * Ncols * sizeof(double)));
 
+}
+
+/** Creates the internal GPU & Host buffers.
+ *  @throws LinearSystemException if there is not enough GPU RAM to create internal buffers.
+ */
+LinearSolver::LinearSolver(
+	unsigned rows_ /**< [in] Strict positive integer. Must be >= columns_ */,
+	unsigned columns_ /**< [in] Strict positive integer.  */
+): rows(rows_), columns(columns_) {
+	init(rows, columns);
+	cout << "DEBUG: Allocator Constructor" << endl;
+}
+
+
+/** Copy constructor */
+LinearSolver::LinearSolver (
+		const LinearSolver& other /**< The source solver */
+		):rows(other.rows), columns(other.columns) {
+	init(rows, columns); // Dimension properties are the only ones copied.
+	cout << "DEBUG: Copy Constructor" << endl;
+}
+
+/** Copy assignment operator */
+LinearSolver & LinearSolver::operator = (const LinearSolver & other /**< The source matrix */){
+	Destroy();
+	init(rows, columns); // Dimension properties are the only ones copied.
+	cout << "DEBUG: Copy assignment operator" << endl;
+	return *this;
+}
+
+/** Move constructor */
+LinearSolver::LinearSolver (LinearSolver&& other /**< The source solver */):rows(other.rows), columns(other.columns){
+	init(rows, columns);
+	CopyToThis(other);
+	other.Clear();
+
+	cout << "DEBUG: Move Constructor" << endl;
+}
+
+void LinearSolver::CopyToThis(LinearSolver & other ) {
+	//Dynamically allocated
+	this->d_A =other.d_A;  /**< Device buffer for coefficients */
+	this->d_TAU=other.d_TAU; /**< Device buffer for τ */
+	this->work=other.work; /**< Device intermediate buffer. */
+	this->d_Q=other.d_Q; /**< Device buffer for CUDA QR execution. */
+	this->d_D=other.d_D; /**< Device buffer for original/non-reduced right side matrix. */
+	this->d_R=other.d_R; /**< Device buffer reduced right side matrix. */
+	this->d_B=other.d_B; /**< Device buffer system's solution. */
+	this->Grid=other.Grid;
+	this->Block=other.Block;
+	this->devInfo =other.devInfo; /**< device info pointer*/
+	this->solver_handle =other.solver_handle; /**< solver handle */
+	this->cublas_handle =other.cublas_handle;/**< cublas handle */
+
+    //
+	this->rows =other.rows; /** Row count (rows >=other.columns)*/
+	this->columns =other.columns; /** Column count */
+	this->work_size =other.work_size;
+}
+
+/** Move assignment operator */
+LinearSolver& LinearSolver::operator = (LinearSolver&& other /**< The source matrix */)
+{
+	LinearSolver & ref = other;
+    Destroy();
+    CopyToThis(ref);
+    other.Clear();
+
+    cout << "DEBUG: Move assignment operator" << endl;
+    return *this;
 }
 
 /** This () operator converts this class into a callable.
@@ -160,18 +225,42 @@ matrix::Matrix LinearSolver::operator () (
 	return cublasDstrmOutput;
 }
 
-LinearSolver::~LinearSolver() {
-	delete Grid;
-	delete Block;
-	cudaFree(devInfo);
-	cusolverDnDestroy(solver_handle);
-	cublasDestroy(cublas_handle);
-	cudaFree(d_A);
-	cudaFree(d_TAU);
-	cudaFree(work);
-	cudaFree(d_Q);
-	cudaFree(d_D);
-	cudaFree(d_R);
-	cudaFree(d_B);
+void LinearSolver::Clear() {
+	Grid = nullptr;
+	Block = nullptr;
+	devInfo = nullptr;
+	solver_handle = nullptr;
+	cublas_handle = nullptr;
+	d_A = nullptr;
+	d_TAU = nullptr;
+	work = nullptr;
+	d_Q = nullptr;
+	d_D = nullptr;
+	d_R = nullptr;
+	d_B = nullptr;
 
+	rows = 0;
+	columns = 0;
+    work_size = 0;
+}
+
+void LinearSolver::Destroy(){
+	if(cublas_handle != nullptr){
+		delete Grid;
+		delete Block;
+		cudaFree(devInfo);
+		cusolverDnDestroy(solver_handle);
+		cublasDestroy(cublas_handle);
+		cudaFree(d_A);
+		cudaFree(d_TAU);
+		cudaFree(work);
+		cudaFree(d_Q);
+		cudaFree(d_D);
+		cudaFree(d_R);
+		cudaFree(d_B);
+		Clear();
+	}
+}
+LinearSolver::~LinearSolver() {
+	Destroy();
 }
