@@ -25,7 +25,24 @@ namespace timeseries {
 		bool allocated=false; /*!< true if the window buffer was allocated by the constructor. */
 		unsigned count = 0; /*!< */
 
+		/**
+		 * Copies (direct assigment) other's properties into this and then clears all other's properties.
+		 */
+		virtual void Move(
+			TimeSeries & other /*!< The source time series. */
+		);
 
+		/** Releases all bufers and set all integer / pointer properties to zero / nullptr.
+		 *
+		 */
+		virtual void Destroy();
+
+		/** Sets all all integer / pointer properties to zero / nullptr.
+		 *
+		 */
+		virtual void Clear();
+
+		//TODO: Implement C++11's rule of five.
 	public:
 		/** Initializes length property and optionally allocate this->window buffer.
 		 *
@@ -34,6 +51,18 @@ namespace timeseries {
 			unsigned length_ /**< [in] Strict positive integer. Indicates the loopback period'sYe length */,
 			bool allocate /**< [in] When true, this constructor makes this->window = new double[length_]*/
 		);
+
+	    /** Copy constructor */
+		TimeSeries (const TimeSeries& other /**< The source matrix */);
+
+	    /** Move constructor */
+		TimeSeries (TimeSeries&& other /**< The source matrix */) noexcept;
+
+		/** Copy operator */
+		TimeSeries& operator = (const TimeSeries& other /**< The source matrix */);
+
+		/** Move assignment operator */
+		TimeSeries& operator = (TimeSeries&& other /**< The source matrix */) noexcept;
 
 		/** Returns the head element. Namely window[length-(index+1)]
 		 * @return A double

@@ -3,6 +3,7 @@
 #include <iostream>
 #include <limits>
 #include <cmath>
+#include <cstring>
 
 using namespace std;
 using namespace timeseries;
@@ -23,10 +24,75 @@ TimeSeries::TimeSeries(
 		cout << "DEBUG: allocating " << this->length << " elements" << endl;
 #endif
 		this->allocated = true;
-		this->window = new double[this->length];
+		this->window = malloc(sizeof(double) * this->length);
 
 	}
 }
+
+/** Copy constructor */
+TimeSeries::TimeSeries (const TimeSeries& other /**< The source matrix */): TimeSeries(other.length, true){
+	this->count = other.count;
+	memcpy(this->window, other.window, length * sizeof(double));
+}
+
+/** Move constructor */
+TimeSeries::TimeSeries (TimeSeries&& other /**< The source matrix */) noexcept {
+	Move(other);
+}
+
+/** Copy operator */
+TimeSeries& TimeSeries::operator = (const TimeSeries& other /**< The source matrix */){
+	this->Destroy();
+	this->length = other.length; /*!< the window length; defaults to 0*/
+	this->window = malloc(sizeof(double) * other.length); /*!< the data window; defaults to nullptr*/
+	this->allocated= true; /*!< true if the window buffer was allocated by the constructor. */
+	this->count = other.count;
+
+	memcpy(this->window, other.window, length * sizeof(double));
+}
+
+/** Move assignment operator */
+TimeSeries& TimeSeries::operator = (TimeSeries&& other /**< The source matrix */) noexcept{
+	Move(other);
+}
+
+/**
+ * Copies (direct assigment) other's properties into this and then clears all other's properties.
+ */
+void TimeSeries::Move(
+	TimeSeries & other /*!< The source time series. */
+) {
+	this->length = other.length; /*!< the window length; defaults to 0*/
+	this->window = other.window; /*!< the data window; defaults to nullptr*/
+	this->allocated= other.allocated; /*!< true if the window buffer was allocated by the constructor. */
+	this->count = other.count;
+	other.Clear();
+}
+
+/** Sets all all integer / pointer properties to zero / nullptr.
+ *
+ */
+void TimeSeries::Clear() {
+	this->length = 0; /*!< the window length; defaults to 0*/
+	this->window = nullptr; /*!< the data window; defaults to nullptr*/
+	this->allocated=false; /*!< true if the window buffer was allocated by the constructor. */
+	this->count = 0; /*!< */
+}
+
+/** Releases all bufers and set all integer / pointer variables to zero / nullptr.
+ *
+ */
+void TimeSeries::Destroy(){
+	if(allocated) {
+#ifdef DEBUG
+		cout << "DEBUG: deleting " << this->length << " elements" << endl;
+#endif
+		delete this->window;
+	}
+
+	Clear();
+}
+
 
 /** Moves all items from right to left and makes this->window[this->length-1] = item
  *	@return this instance
@@ -83,11 +149,5 @@ void TimeSeries::copy(TimeSeries &source /**< [in]  Source reference. */) {
  *
  */
 TimeSeries::~TimeSeries() {
-	if(allocated) {
-#ifdef DEBUG
-		cout << "DEBUG: deleting " << this->length << " elements" << endl;
-#endif
-		delete this->window;
-		allocated = false;
-	}
+	Destroy();
 }
