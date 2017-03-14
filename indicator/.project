@@ -5,6 +5,8 @@
 	<projects>
 		<project>timeseries</project>
 		<project>regression</project>
+		<project>object-pool</project>
+		<project>matrix</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

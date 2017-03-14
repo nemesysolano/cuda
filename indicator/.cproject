@@ -33,6 +33,8 @@
 								<option defaultValue="nvcc.compiler.optimization.level.none" id="nvcc.compiler.optimization.level.1084921858" name="Optimization Level" superClass="nvcc.compiler.optimization.level" valueType="enumerated"/>
 								<option id="nvcc.compiler.pic.26311242" name="Position Independent Code (-fPIC)" superClass="nvcc.compiler.pic"/>
 								<option id="nvcc.compiler.include.paths.1137613038" name="Include paths (-I)" superClass="nvcc.compiler.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/matrix}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/object-pool}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/regression}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/timeseries}&quot;"/>
 								</option>
@@ -45,6 +47,8 @@
 							<tool id="nvcc.archiver.base.2050767789" name="NVCC Archiver" superClass="nvcc.archiver.base"/>
 							<tool id="com.nvidia.host.assembler.747085316" name="Host Assembler" superClass="com.nvidia.host.assembler">
 								<option id="gnu.both.asm.option.include.paths.1483968319" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/matrix}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/object-pool}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/regression}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/timeseries}&quot;"/>
 								</option>
@@ -73,6 +77,20 @@
 						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/regression"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/regression/Debug"/>
 						<entry flags="RESOLVED" kind="libraryFile" name="regression" srcPrefixMapping="" srcRootPath=""/>
+					</externalSetting>
+				</externalSettings>
+				<externalSettings containerId="object-pool;cdt.managedbuild.config.gnu.so.debug.491599189" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
+					<externalSetting>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/object-pool"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/object-pool/Debug"/>
+						<entry flags="RESOLVED" kind="libraryFile" name="object-pool" srcPrefixMapping="" srcRootPath=""/>
+					</externalSetting>
+				</externalSettings>
+				<externalSettings containerId="matrix;cdt.managedbuild.config.gnu.lib.debug.127942908" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
+					<externalSetting>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/matrix"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/matrix/Debug"/>
+						<entry flags="RESOLVED" kind="libraryFile" name="matrix" srcPrefixMapping="" srcRootPath=""/>
 					</externalSetting>
 				</externalSettings>
 			</storageModule>
@@ -106,6 +124,8 @@
 							<tool id="nvcc.compiler.base.1257212698" name="NVCC Compiler" superClass="nvcc.compiler.base">
 								<option id="nvcc.compiler.pic.1745484031" name="Position Independent Code (-fPIC)" superClass="nvcc.compiler.pic"/>
 								<option id="nvcc.compiler.include.paths.87217440" name="Include paths (-I)" superClass="nvcc.compiler.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/matrix}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/object-pool}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/regression}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/timeseries}&quot;"/>
 								</option>
@@ -118,6 +138,8 @@
 							<tool id="nvcc.archiver.base.1665768126" name="NVCC Archiver" superClass="nvcc.archiver.base"/>
 							<tool id="com.nvidia.host.assembler.23909706" name="Host Assembler" superClass="com.nvidia.host.assembler">
 								<option id="gnu.both.asm.option.include.paths.1997493114" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/matrix}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/object-pool}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/regression}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/timeseries}&quot;"/>
 								</option>
@@ -147,6 +169,20 @@
 						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/regression"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/regression/Release"/>
 						<entry flags="RESOLVED" kind="libraryFile" name="regression" srcPrefixMapping="" srcRootPath=""/>
+					</externalSetting>
+				</externalSettings>
+				<externalSettings containerId="object-pool;cdt.managedbuild.config.gnu.so.release.1916848380" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
+					<externalSetting>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/object-pool"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/object-pool/Release"/>
+						<entry flags="RESOLVED" kind="libraryFile" name="object-pool" srcPrefixMapping="" srcRootPath=""/>
+					</externalSetting>
+				</externalSettings>
+				<externalSettings containerId="matrix;cdt.managedbuild.config.gnu.lib.release.2069366211" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
+					<externalSetting>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/matrix"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/matrix/Release"/>
+						<entry flags="RESOLVED" kind="libraryFile" name="matrix" srcPrefixMapping="" srcRootPath=""/>
 					</externalSetting>
 				</externalSettings>
 			</storageModule>
