@@ -22,6 +22,7 @@ namespace pool {
 		INVALID_START_THREAD,
 		INVALID_STATE_FOR_ADDING,
 		INVALID_STATE_FOR_SUBMISSION,
+		POOL_ALREADY_DESTROYED
 	};
 
 	extern const char* POOL_ERROR_MESSAGES[];
@@ -56,111 +57,42 @@ namespace pool {
 
 
 	template<typename T> class Pool{
-	public:
-		typedef int(*Callback)(T & object);
 	private:
 
-		std::list<std::shared_ptr<T>> all;
-		std::list<std::shared_ptr<T>> available;
+		std::list<std::shared_ptr<T>> * all = nullptr;
+		std::list<std::shared_ptr<T>> * available = nullptr;
+		std::mutex * critical_section_mutex = nullptr;
+		std::mutex * life_cycle_mutex = nullptr;
+		std::thread * scheduler_thread = nullptr;
+	    std::condition_variable * condition_var = nullptr;
+	    bool * running = false;
 
-		std::mutex critical_section_mutex;
-		std::mutex life_cycle_mutex;
-		std::thread scheduler_thread;
-		bool running = false;
 		std::thread::id current_thread_id;
-	    std::condition_variable condition_var; /* Conditional variable */
-
+		bool original = true;
 
 	public:
 
-		Pool(const Pool&) = delete;
+		Pool(const Pool&);
+
 		Pool(Pool&&) = delete;
-		Pool & operator=(const Pool&) = delete;
+
+		Pool & operator=(const Pool&);
+
 		Pool & operator=(Pool&&) = delete;
 
+		Pool();
 
-		/** Empty constructor.
-		 *
-		 */
-		Pool() {
-			current_thread_id = std::this_thread::get_id();
+		~Pool();
 
-		}
+		void Add(std::shared_ptr<T> & ptr);
 
-		~Pool() {
+		void Add(std::shared_ptr<T> &&  ptr);
 
-		}
+		void Start();
 
-		void Add(std::shared_ptr<T> & ptr){
-			if(current_thread_id != std::this_thread::get_id() || running)
-				throw PoolError(INVALID_STATE_FOR_ADDING, POOL_ERROR_MESSAGES[INVALID_STATE_FOR_ADDING]);
+		void Stop();
 
-			if(!running) {
-				this->all.push_back(ptr);
-				this->available.push_back(ptr);
-			}
-		}
-
-		void Add(std::shared_ptr<T> &&  ptr){
-			std::shared_ptr<T> & ref = ptr;
-			Add(ref);
-		}
-
-		void Start() {
-			if(!running) {
-				std::unique_lock<std::mutex> lock(life_cycle_mutex);
-				running = true;
-			}
-			condition_var.notify_all();
-		}
-
-
-		void Stop() {
-			if(running) {
-				std::unique_lock<std::mutex> lock(life_cycle_mutex);
-				running = false;
-			}
-			condition_var.notify_all();
-		}
-
-		 void Submit(Callback callback) {
-			if(!running)
-				throw PoolError(INVALID_STATE_FOR_SUBMISSION, POOL_ERROR_MESSAGES[INVALID_STATE_FOR_SUBMISSION]);
-			bool found = false;
-			std::shared_ptr<T> ptr;
-
-			while(!found) {
-				{
-					std::unique_lock<std::mutex> lock(critical_section_mutex);
-					if(this->available.size() > 0) {
-						ptr =this->available.back();
-						this->available.pop_back();
-						found = true;
-					}
-				}
-
-				if(!found){
-					std::unique_lock<std::mutex> lock(critical_section_mutex);
-					condition_var.wait(lock);
-				}
-
-
-				if(!running)
-					break;
-			}
-
-			if(found) {
-				T * ref = ptr.get();
-				callback(*ref); //TODO: Handle exceptions in a nicely.
-
-				{
-					std::unique_lock<std::mutex> lock(critical_section_mutex);
-					this->available.push_front (ptr);
-				}
-
-				condition_var.notify_all();
-			}
-		}
+		void Submit(std::function<int (const T &)>  callback) ;
 
 
 	};
