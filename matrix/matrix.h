@@ -9,8 +9,45 @@
 #define MATRIX_H_
 #include "matrix.h"
 #include <cstdlib>
-
+#include <iostream>
 namespace matrix {
+	/** Error code ranging between 0 and 100 are reserved for exceptions thrown from Matrix'S methods.
+	 *
+	 */
+	enum MATRIX_ERROR_ENUM {
+		UNEXPECTED_EOF_IN_CONSTRUCTOR,
+		BAD_INPUT_STREAM
+	};
+
+	extern const char* MATRIX_ERROR_MESSAGES[];
+
+	/** This exception reports issues that may occur inside Matrix class' methods.
+	 *
+	 */
+	class MatrixError: public std::runtime_error {
+	protected:
+		int code = 0 /**< Custom error message. */;
+	public:
+		/** calls runtime_error(const string &) and initializes this->code;
+		 *
+		 */
+		 inline explicit MatrixError (int code_ /**< Custom error code. */, const std::string& what_arg /**< Custom error message. */): runtime_error(what_arg), code(code_) {
+
+		 }
+
+		 /** calls runtime_error(const char *) and initializes this->code;
+		  *
+		  */
+		 inline explicit MatrixError (int code_ /**< Custom error code. */, const char* what_arg /**< Custom error message. */): runtime_error(what_arg), code(code_) {
+
+		 }
+
+		 /**
+		  * @return this->code
+		  */
+		 inline int Code() { return code; }
+	};
+
 	/** This class implements a M * N Matrix.
 	 *  It follows the rule of five as required by C++11
 	 */
@@ -52,6 +89,11 @@ namespace matrix {
 
 
 			inline double * Buffer() { return buffer;}; // Be careful with direct buffer manipulation!!
+
+			/** Creates a rows_ * columns_ matrix.
+			*
+			*/
+			Matrix(std::istream & input);
 
 			/** Creates a rows_ * columns_ matrix.
 			 *
