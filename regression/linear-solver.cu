@@ -12,8 +12,8 @@ using namespace matrix;
 static const char* LINEAR_SOLVER_ERROR_MESSAGES[] = {
 	"@LinearSolver::LinearSolver(rows_, columns_). columns_ > rows_ ",
 	"@LinearSolver::operator(matrix::Matrix & A, matrix::Matrix & B). Either A or B is empty.",
-	"@LinearSolver::operator(matrix::Matrix & A, matrix::Matrix & B). Coefficient matrix's column count is not equals solver's column count.",
-	"@LinearSolver::operator(matrix::Matrix & A, matrix::Matrix & B). A.Rows() > this->rows || B.Rows() > this->rows || A.Rows() != B.Rows()"
+	"@LinearSolver::operator(matrix::Matrix & A, matrix::Matrix & B). Coefficient matrix's column count is greater solver's column count.",
+	"@LinearSolver::operator(matrix::Matrix & A, matrix::Matrix & B). A.Rows() > rows || B.Rows() > rows || A.Rows() != B.Rows()"
 };
 
 __global__ void internal_copy_kernel(const double * __restrict d_in1, double * __restrict d_R, const double * __restrict d_C, double * __restrict d_B, const int M, const int N) {
@@ -169,17 +169,17 @@ matrix::Matrix LinearSolver::operator () (
 	matrix::Matrix & B /**< Right side matriz */
 ) {
 
-    const int Nrows = (int)rows;
-    const int Ncols = (int)columns;
-
 	if(A.IsEmpty() || B.IsEmpty())
 		throw LinearSolverError((int)EMPTY_OPERANDS, LINEAR_SOLVER_ERROR_MESSAGES[(int)EMPTY_OPERANDS]);
 
-	if(A.Columns() != columns)
+	if(A.Columns() > columns)
 		throw LinearSolverError((int)COEFFICIENT_MATRIX_COLS_MISMATCH, LINEAR_SOLVER_ERROR_MESSAGES[(int)COEFFICIENT_MATRIX_COLS_MISMATCH]);
 
-	if(A.Rows() != rows || B.Rows() != rows || A.Rows() != B.Rows())
+	if(A.Rows() > rows || B.Rows() > rows || A.Rows() != B.Rows())
 		throw LinearSolverError((int)ROWS_MISMATCH, LINEAR_SOLVER_ERROR_MESSAGES[(int)ROWS_MISMATCH]);
+
+    const int Nrows = (int)A.Rows();
+    const int Ncols = (int)A.Columns();
 
 	 // --- Setting the device matrix and moving the host matrix to the device
 	const double * h_A = A.Buffer();
