@@ -10,18 +10,19 @@
 #include <functional>
 #include <vector>
 #include <timeseries.h>
+#include <memory>
 namespace indicator {
 	/** This class is a container of time series references.
 	 *	Developer must take care of scoping issues when storing references into collections.
 	 */
-	class TimeSeriesBag:  public std::vector<std::reference_wrapper<timeseries::TimeSeries>> {
+	class TimeSeriesBag:  public std::vector<std::shared_ptr<timeseries::TimeSeries>> {
 	public:
-		inline TimeSeriesBag() : std::vector<std::reference_wrapper<timeseries::TimeSeries>> () {
+		inline TimeSeriesBag() : std::vector<std::shared_ptr<timeseries::TimeSeries>> () {
 
 		}
 
-		inline TimeSeriesBag(timeseries::TimeSeries &series): TimeSeriesBag()  {
-			this->push_back(series);
+		inline TimeSeriesBag(std::shared_ptr<timeseries::TimeSeries> ptr): TimeSeriesBag()  {
+			this->push_back(ptr);
 		}
 
 	};

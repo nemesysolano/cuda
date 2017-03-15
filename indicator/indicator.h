@@ -8,6 +8,8 @@
 #ifndef INDICATOR_H_
 #define INDICATOR_H_
 #include <timeseries.h>
+#include <linear-solver.h>
+#include <object-pool.h>
 #include "timeseries-bag.h"
 namespace indicator {
 
@@ -46,10 +48,12 @@ namespace indicator {
 	};
 
 	/** In the context of technical analysis, an indicator is a mathematical calculation based on a security's price and/or volume. The result is used to predict future prices.
+	 *
 	 */
 	class Indicator: public timeseries::TimeSeries {
 	protected:
 		indicator::TimeSeriesBag & bag; /**< Bag containing the timeseries references that feed this indicator. */
+		pool::Pool<regression::LinearSolver> & solver_pool;
 	public:
 
 		/** Creates the internal buffer that represents the lookback period.
@@ -57,16 +61,10 @@ namespace indicator {
 		 */
 		Indicator(
 			unsigned length, /**< Lookback period's length. */
-			indicator::TimeSeriesBag & bag_ /**< Bag containing the timeseries references that feed this indicator. */
+			indicator::TimeSeriesBag & bag_, /**< Bag containing the timeseries references that feed this indicator. */
+			pool::Pool<regression::LinearSolver> & solver_pool_ /**< This pool provides LinearSolver instances used to perform multivariate regression. */
 		);
 
-		/** Creates the internal buffer that represents the lookback period.
-		 *
-		 */
-		inline Indicator(
-			unsigned length, /**< Lookback period's length. */
-			indicator::TimeSeriesBag && bag_ /**< Bag containing the timeseries references that feed this indicator. */
-		): Indicator(length, bag_){}
 
 	};
 
