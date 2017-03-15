@@ -6,7 +6,7 @@ using namespace timeseries;
 /** Initializes internal istream_iterator
  *
  */
-StreamIterator::StreamIterator(
+DoubleIterator::DoubleIterator(
 	std::istream & input_
 ) : iterator(std::istream_iterator<double>(input_)), input(input_) {
 	(*this)++;
@@ -14,14 +14,14 @@ StreamIterator::StreamIterator(
 /**
  * @returns averages::NOT_A_NUMBER when iterator can't fetch more values.
  */
-double StreamIterator::operator*() {
+double DoubleIterator::operator*() {
 	return current;
 }
 
 /** Postfix increment operator
  * @returns *this
  */
-Iterator & StreamIterator::operator++(int){
+Iterator & DoubleIterator::operator++(int){
 	if(iterator == eos) {
 		current = timeseries::NOT_A_NUMBER;
 	}else {
@@ -35,6 +35,6 @@ Iterator & StreamIterator::operator++(int){
 /**
  *
  */
-StreamIterator::~StreamIterator(){
+DoubleIterator::~DoubleIterator(){
 
 }

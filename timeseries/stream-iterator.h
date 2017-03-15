@@ -14,7 +14,7 @@ namespace timeseries {
 	 * The file must contain one value per line. Finally, the mutation methods must not be called
 	 * if some time series holds a reference to this object.
 	 */
-	class StreamIterator : public Iterator {
+	class DoubleIterator : public Iterator {
 	protected:
 		std::istream_iterator<double> iterator; /**< Wrapper std iterator that provides data to this instance. */
 		std::istream_iterator<double> eos; /**< [in] End of stream flag */
@@ -22,13 +22,13 @@ namespace timeseries {
 		double current = timeseries::NOT_A_NUMBER; /**< The last value fetched by the iterator */
 
 	public:
-		StreamIterator(StreamIterator && source) = delete;
-		StreamIterator(StreamIterator & source)  = delete;
+		DoubleIterator(DoubleIterator && source) = delete;
+		DoubleIterator(DoubleIterator & source)  = delete;
 
 		/** Initializes internal istream_iterator
 		 *
 		 */
-		StreamIterator(
+		DoubleIterator(
 			std::istream & input_ /**< [in] A valid refernce to an input stream. */
 		);
 
@@ -45,7 +45,7 @@ namespace timeseries {
 		/**
 		 *
 		 */
-		virtual ~StreamIterator();
+		virtual ~DoubleIterator();
 	};
 }
 
