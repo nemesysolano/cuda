@@ -24,7 +24,7 @@ TimeSeries::TimeSeries(
 		cout << "DEBUG: allocating " << this->length << " elements" << endl;
 #endif
 		this->allocated = true;
-		this->window = malloc(sizeof(double) * this->length);
+		this->window = (double *)malloc(sizeof(double) * this->length);
 
 	}
 }
@@ -44,16 +44,19 @@ TimeSeries::TimeSeries (TimeSeries&& other /**< The source matrix */) noexcept {
 TimeSeries& TimeSeries::operator = (const TimeSeries& other /**< The source matrix */){
 	this->Destroy();
 	this->length = other.length; /*!< the window length; defaults to 0*/
-	this->window = malloc(sizeof(double) * other.length); /*!< the data window; defaults to nullptr*/
+	this->window = (double *)malloc(sizeof(double) * other.length); /*!< the data window; defaults to nullptr*/
 	this->allocated= true; /*!< true if the window buffer was allocated by the constructor. */
 	this->count = other.count;
 
 	memcpy(this->window, other.window, length * sizeof(double));
+
+	return * this;
 }
 
 /** Move assignment operator */
 TimeSeries& TimeSeries::operator = (TimeSeries&& other /**< The source matrix */) noexcept{
 	Move(other);
+	return * this;
 }
 
 /**
