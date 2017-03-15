@@ -3,6 +3,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <functional>
+#include <algorithm>
+#include <future>
+
 using namespace matrix;
 using namespace std;
 
@@ -24,6 +27,21 @@ Matrix::Matrix(
     for(unsigned i = 0; i < length; i++)
     {
     	buffer[i] = init;
+    }
+}
+
+/** Store the same value in all cells.
+ * @param v
+ */
+void Matrix::All(double v) {
+	const unsigned length = rows * columns;
+	double * buffer = this->buffer;
+
+#pragma omp parallel
+#pragma omp for
+    for(unsigned i = 0; i < length; i++)
+    {
+    	buffer[i] = v;
     }
 }
 

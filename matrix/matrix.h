@@ -91,6 +91,10 @@ namespace matrix {
 			 */
 			inline unsigned Columns() {return columns;}
 
+			/** Store the same value in all cells.
+			 * @param v
+			 */
+			void All(double v);
 			/** Releases allocated buffer and sets rows and columns to zero and buffer to nullptr.
 			 *
 			 */
